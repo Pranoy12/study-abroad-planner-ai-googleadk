@@ -17,6 +17,7 @@ session_service = DatabaseSessionService(db_url=dburl)
 
 initial_state = {
     "user_name": "",
+    "selected_college": "",
     "interaction_history": [],
 }
 

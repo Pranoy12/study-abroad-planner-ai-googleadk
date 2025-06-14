@@ -1,5 +1,9 @@
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
+from google.adk.tools.agent_tool import AgentTool
+
+from .sub_agents.college_finder import college_finder
+from .sub_agents.college_selector import college_selector
 
 def clear_chat_history(tool_context: ToolContext) -> dict:
     """Clear the chat history.
@@ -9,7 +13,6 @@ def clear_chat_history(tool_context: ToolContext) -> dict:
     """
     print(f"--- Tool: clear_chat_history called ---")
 
-    # Update the name in state
     tool_context.state["interaction_history"] = []
 
     return {
@@ -55,6 +58,14 @@ root_agent = Agent(
             - user name: {user_name}
             - interaction history: {interaction_history}
             
+        You have access to the following tools:
+            - update_user_name
+            - clear_chat_history
+            - college_finder
+            
+        You have access to the following sub agents:
+            - college_selector
+            
         GUIDLINES:
             1. Greet the user first using the following guidelines:
                 - Use friendly and proffesional tone when greeting the user.
@@ -63,9 +74,15 @@ root_agent = Agent(
                 - Once you get a new user_name, store that inside the session state using update_user_name tool
                 - If you already know the user's name, greet them using their name
             2. If the user wants to clear their chat history (e.g, 'clear', 'clear chat' etc) use the tool clear_chat_history
+            3. Use college_finder if the user asks to find colleges
+            4. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
     """,
     tools=[
         update_user_name,
-        clear_chat_history    
+        clear_chat_history,
+        AgentTool(college_finder)
+    ],
+    sub_agents=[
+        college_selector
     ]
 )
