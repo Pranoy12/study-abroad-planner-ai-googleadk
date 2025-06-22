@@ -76,6 +76,7 @@ root_agent = Agent(
             2. If the user wants to clear their chat history (e.g, 'clear', 'clear chat' etc) use the tool clear_chat_history
             3. Use college_finder if the user asks to find colleges
             4. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
+            5. After a college is selected output to the user that the college has been selected/added.
     """,
     tools=[
         update_user_name,

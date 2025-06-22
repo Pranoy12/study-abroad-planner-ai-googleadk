@@ -17,13 +17,13 @@ session_service = DatabaseSessionService(db_url=dburl)
 
 initial_state = {
     "user_name": "",
-    "selected_college": "",
+    "selected_college": [],
     "interaction_history": [],
 }
 
 async def main():
     APP_NAME = "Study Abroad Planner"
-    USER_ID = "p12"
+    USER_ID = "v04"
     existing_sessions = await session_service.list_sessions(
         app_name=APP_NAME,
         user_id=USER_ID,
