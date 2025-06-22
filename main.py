@@ -19,11 +19,16 @@ initial_state = {
     "user_name": "",
     "selected_college": [],
     "interaction_history": [],
+    "academic_percentage": "",
+    "letters_of_recommendation": "",
+    "budget":"",
+    "standardised_test_score":"",
+    
 }
 
 async def main():
     APP_NAME = "Study Abroad Planner"
-    USER_ID = "v04"
+    USER_ID = "v05"
     existing_sessions = await session_service.list_sessions(
         app_name=APP_NAME,
         user_id=USER_ID,

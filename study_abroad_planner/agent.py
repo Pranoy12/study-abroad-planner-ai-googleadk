@@ -4,6 +4,8 @@ from google.adk.tools.agent_tool import AgentTool
 
 from .sub_agents.college_finder import college_finder
 from .sub_agents.college_selector import college_selector
+from .sub_agents.user_info import user_info
+from .sub_agents.resume_builder import resume_builder
 
 def clear_chat_history(tool_context: ToolContext) -> dict:
     """Clear the chat history.
@@ -57,6 +59,12 @@ root_agent = Agent(
         State values present:
             - user name: {user_name}
             - interaction history: {interaction_history}
+            - academic_percentage: {academic_percentage},
+            - letters_of_recommendation: {letters_of_recommendation},
+            - budget:{budget},
+            - standardised_test_score:{standardised_test_score},
+            - selected_college : {selected_college}
+            
             
         You have access to the following tools:
             - update_user_name
@@ -65,6 +73,8 @@ root_agent = Agent(
             
         You have access to the following sub agents:
             - college_selector
+            - user_info
+            - resume_builder
             
         GUIDLINES:
             1. Greet the user first using the following guidelines:
@@ -73,10 +83,12 @@ root_agent = Agent(
                 - If you don't know the user's name from state {user_name} , greet them generally and ask for their name. 
                 - Once you get a new user_name, store that inside the session state using update_user_name tool
                 - If you already know the user's name, greet them using their name
-            2. If the user wants to clear their chat history (e.g, 'clear', 'clear chat' etc) use the tool clear_chat_history
-            3. Use college_finder if the user asks to find colleges
-            4. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
-            5. After a college is selected output to the user that the college has been selected/added.
+            2.Immediatly after Greeting, check if any of these states are empty->{academic_percentage},{letters_of_recommendation},{budget},{standardised_test_score}. if empty, Ask the user to input those details and use the user_info sub-agent to add the informations to the states.
+            3. If the user wants to clear their chat history (e.g, 'clear', 'clear chat' etc) use the tool clear_chat_history
+            4. Use college_finder if the user asks to find colleges
+            5. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
+            6. If user ask to build a resume , use the resume_builder sub-agent to generate resume and store to the database.
+            
     """,
     tools=[
         update_user_name,
@@ -84,6 +96,8 @@ root_agent = Agent(
         AgentTool(college_finder)
     ],
     sub_agents=[
-        college_selector
+        college_selector,
+        user_info,
+        resume_builder
     ]
 )

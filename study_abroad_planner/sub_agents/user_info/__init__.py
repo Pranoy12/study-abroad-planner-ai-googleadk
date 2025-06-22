@@ -1,1 +1,1 @@
-from .agent import college_selector
+from .agent import user_info
