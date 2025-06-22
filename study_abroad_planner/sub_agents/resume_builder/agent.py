@@ -7,7 +7,9 @@ from fpdf import FPDF
 from datetime import datetime
 
 # Step 1: Create a function to generate and save PDF
-def save_text_to_pdf_and_db(text_content, filename="output.pdf", db_name="pdf_store.db"):
+def save_text_to_pdf_and_db(text_content : str)-> dict:
+    filename="output.pdf"
+    db_name="pdf_store.db"
     # Create folder if it doesn't exist
     output_folder = "pdfs"
     os.makedirs(output_folder, exist_ok=True)
@@ -47,13 +49,10 @@ def save_text_to_pdf_and_db(text_content, filename="output.pdf", db_name="pdf_st
     conn.commit()
     conn.close()
 
-    print(f"PDF saved to {pdf_path} and record stored in database.")
-
-# Example usage
-text = """Hello Pranoy!
-This is a sample PDF file created from text.
-Enjoy storing documents like this using Python."""
-save_text_to_pdf_and_db(text, "sample1.pdf")
+    return {
+        "action": "save_text_to_pdf_and_db",
+        "message": "save pdf",
+    }
 
 
 resume_builder= Agent(
@@ -61,16 +60,15 @@ resume_builder= Agent(
     model="gemini-2.0-flash-001",
     description="Generates resume",
     instruction="""
-        You are a resume builder agent.
-        Your job is to create a text resume by asking the user necessary detailes required for a resume.
-        Generate  a resume for the user using all the information and store that generated text to text_content variable.
-        
+        You are a text resume builder agent.
+        Your job is to create a small text resume by asking the user necessary detailes required for a small resume with 3 basic information.
+        Generate  a resume for the user using  the provided information and provide the output to user and also use save_text_to_pdf_and_db
         
         
         Delegate back to root_agent after output generated.
     """,
-    # tools=[
-    #     save_text_to_pdf_and_db
-    # ],
-    # output_key="selected_college"
+    tools=[
+        save_text_to_pdf_and_db
+    ]
+
 )
