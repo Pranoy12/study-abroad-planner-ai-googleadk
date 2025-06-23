@@ -22,7 +22,7 @@ initial_state = {
     "academic_percentage": "",
     "letters_of_recommendation": "",
     "budget":"",
-    "standardised_test_score":"",
+    "standardised_test_score":""
     
 }
 

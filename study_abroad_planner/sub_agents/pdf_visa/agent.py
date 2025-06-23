@@ -1,17 +1,23 @@
 from google.adk.agents import Agent
-from google.adk.tools.tool_context import ToolContext
+from google.adk.tools import google_search
+
 
 import os
 import sqlite3
 from fpdf import FPDF
 from datetime import datetime
+import unicodedata
 
 # Step 1: Create a function to generate and save PDF
-def save_text_to_pdf_and_db(text_content : str)-> dict:
-    filename="output.pdf"
-    db_name="pdf_store.db"
+def save_visaprocess_to_pdf_and_db(text_content_1 : str)-> dict:
+    
+    def clean(text_content_1): 
+        return unicodedata.normalize("NFKD", text_content_1).encode("latin-1", "ignore").decode("latin-1")
+
+    filename="visa_process.pdf"
+    db_name="pdf_store2.db"
     # Create folder if it doesn't exist
-    output_folder = "pdfs"
+    output_folder = "pdfs2"
     os.makedirs(output_folder, exist_ok=True)
     pdf_path = os.path.join(output_folder, filename)
 
@@ -21,8 +27,8 @@ def save_text_to_pdf_and_db(text_content : str)-> dict:
     pdf.set_font("Arial", size=12)
 
     # Split lines to avoid overflow
-    for line in text_content.split('\n'):
-        pdf.multi_cell(0, 10, line)
+    for line in text_content_1.split('\n'):
+        pdf.multi_cell(0, 10, clean(line))
     
     pdf.output(pdf_path)
 
@@ -50,25 +56,27 @@ def save_text_to_pdf_and_db(text_content : str)-> dict:
     conn.close()
 
     return {
-        "action": "save_text_to_pdf_and_db",
+        "action": "save_visaprocess_to_pdf_and_db",
         "message": "save pdf",
     }
 
 
-resume_builder= Agent(
-    name="resume_builder",
+
+
+pdf_visa= Agent(
+    name="pdf_visa",
     model="gemini-2.0-flash-001",
-    description="Generates resume",
+    description="visa process steps",
     instruction="""
-        You are a text resume builder agent.
-        Your job is to create a small text resume by asking the user necessary detailes required for a small resume with 3 basic information.
-        Generate  a resume for the user using  the provided information and provide the output to user and also use  the tool save_text_to_pdf_and_db
+        You are an agent that stores text content to a pdf in the db.
+        you need to store the text in state key 'visa_process_key'
+        use save_visaprocess_to_pdf_and_db for saving this to pdf and storing to db
         
         
         Delegate back to root_agent after output generated.
     """,
     tools=[
-        save_text_to_pdf_and_db
+        save_visaprocess_to_pdf_and_db
     ]
 
 )
