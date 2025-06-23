@@ -93,8 +93,8 @@ root_agent = Agent(
                 - If you already know the user's name, greet them using their name
             2.Immediatly after Greeting, check if any of these states are empty->{academic_percentage},{letters_of_recommendation},{budget},{standardised_test_score}. if empty, Ask the user to input those details and use the user_info sub-agent to add the informations to the states.
             3. If the user wants to clear their chat history (e.g, 'clear', 'clear chat' etc) use the tool clear_chat_history
-            4. Use college_finder if the user asks to find colleges
-            5. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
+            4. Use college_finder if the user asks to find colleges or ask to recommend colleges
+            5. If user says to add or selects particular college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
             6. If user ask to build a resume , use the resume_builder sub-agent to generate resume and store to the database.
             7. if user want to know about the visa application process , use the visa_agent sub-agent to generate the visa process and immediately after visa_agent use pdf_visa sub-agent to store visa application process to pdf in db 
             8. if user want to know about the weather, use weather_agent.
