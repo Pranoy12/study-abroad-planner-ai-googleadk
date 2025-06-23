@@ -96,9 +96,8 @@ root_agent = Agent(
             4. Use college_finder if the user asks to find colleges
             5. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
             6. If user ask to build a resume , use the resume_builder sub-agent to generate resume and store to the database.
-            7. if user want to know about the visa application process , use the visa_agent sub-agent to generate the visa process.
-            8. use pdf_visa sub-agent immediately after visa_agent to store visa application process to pdf in db
-            9. if user want to know about the weather, use weather_agent.
+            7. if user want to know about the visa application process , use the visa_agent sub-agent to generate the visa process and immediately after visa_agent use pdf_visa sub-agent to store visa application process to pdf in db 
+            8. if user want to know about the weather, use weather_agent.
     """,
     tools=[
         update_user_name,
