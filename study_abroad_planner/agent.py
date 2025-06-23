@@ -1,11 +1,14 @@
 from google.adk.agents import Agent
 from google.adk.tools.tool_context import ToolContext
 from google.adk.tools.agent_tool import AgentTool
-
+from google.adk.tools import agent_tool
 from .sub_agents.college_finder import college_finder
 from .sub_agents.college_selector import college_selector
 from .sub_agents.user_info import user_info
 from .sub_agents.resume_builder import resume_builder
+from .sub_agents.weather_agent import weather_agent
+from .sub_agents.visa_agent import visa_agent
+from .sub_agents.pdf_visa import pdf_visa
 
 def clear_chat_history(tool_context: ToolContext) -> dict:
     """Clear the chat history.
@@ -70,11 +73,16 @@ root_agent = Agent(
             - update_user_name
             - clear_chat_history
             - college_finder
+            - visa_agent
+            - weather_agent
             
         You have access to the following sub agents:
             - college_selector
             - user_info
             - resume_builder
+            - pdf_visa
+
+            
             
         GUIDLINES:
             1. Greet the user first using the following guidelines:
@@ -88,16 +96,21 @@ root_agent = Agent(
             4. Use college_finder if the user asks to find colleges
             5. If user says to add/select/choose a college (e.g, 'Select Stanford'), use the college_selector sub-agent to add the college to state
             6. If user ask to build a resume , use the resume_builder sub-agent to generate resume and store to the database.
-            
+            7. if user want to know about the visa application process , use the visa_agent sub-agent to generate the visa process.
+            8. use pdf_visa sub-agent immediately after visa_agent to store visa application process to pdf in db
+            9. if user want to know about the weather, use weather_agent.
     """,
     tools=[
         update_user_name,
         clear_chat_history,
-        AgentTool(college_finder)
+        agent_tool.AgentTool(agent=college_finder),
+        agent_tool.AgentTool(agent=visa_agent),
+        agent_tool.AgentTool(agent=weather_agent)
     ],
     sub_agents=[
         college_selector,
         user_info,
-        resume_builder
+        resume_builder,
+        pdf_visa
     ]
 )
